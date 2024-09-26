@@ -1,3 +1,12 @@
+import  mysql.connector
+
+conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+)
+cursor = conexao.cursor()
 from fastapi import FastAPI
 
 Presto = FastAPI()
@@ -8,15 +17,18 @@ def home():
 
 @Presto.get("/usuarios")
 def usuarios():
-    return "Aqui será os usuários"
+    comando = f'SELECT * FROM cliente'
 
 @Presto.get("/avaliacoes")
 def avaliacoes():
-    return "aqui será as avaliacões"
+    comando = f'SELECT * FROM avaliacao'
 
 @Presto.get("/pizzas")
 def pizza():
-    return "aqui terá as descrições das pizzas"
+    comando = f'SELECT * FROM pizza'
 @Presto.get("/mentores")
 def mentores():
     return "obrigado gente"
+
+cursor.close()
+conexao.close()
