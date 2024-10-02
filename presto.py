@@ -5,7 +5,7 @@ Presto = FastAPI()
 
 @Presto.get("/")
 def home():
-    return "Prestoooooooooooooooooooooo"
+    return "This is Presto"
 
 @Presto.get("/usuarios")
 def usuarios():
@@ -17,8 +17,13 @@ def usuarios():
     )
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM cliente'
+    cursor.execute(comando)
+
+    usuarios=cursor.fetchall()
     cursor.close()
     conexao.close()
+    
+    return{"usuarios": usuarios}
 
 @Presto.get("/avaliacoes")
 def avaliacoes():
@@ -30,8 +35,13 @@ def avaliacoes():
     )
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM avaliacao'
+    cursor.execute(comando)
+
+    avaliacoes=cursor.fetchall()
     cursor.close()
     conexao.close()
+
+    return {"avaliacoes":avaliacoes}
 
 @Presto.get("/pizzas")
 def pizza():
@@ -43,9 +53,14 @@ def pizza():
     )
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM pizza'
+    cursor.execute(comando)
+
+    pizza=cursor.fetchall()
     cursor.close()
     conexao.close()
-    cursor.fetchall
+    
+    return{"pizza":pizza}
+
 @Presto.get("/mentores")
 def mentores():
     return "obrigado gente"
