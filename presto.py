@@ -22,8 +22,6 @@ def usuarios():
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM cliente'
     cursor.execute(comando)
-    comando2 = f'INSERT INTO cliente (nome, email, senha) VALUES ({usuarios['nome']}, {usuarios['email']}, {usuarios['senha']})'
-    cursor.execute(comando2)
 
     usuarios=cursor.fetchall()
     cursor.close()
@@ -34,6 +32,18 @@ def usuarios():
 @Presto.post("/usuarios")
 def usuarios(usuario: dict = Body (...)):
     usuarios.append(usuario)
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor()
+    comando = f'INSERT INTO cliente (nome, email, senha) VALUES ({usuarios['nome']}, {usuarios['email']}, {usuarios['senha']})'
+    cursor.execute(comando)
+
+    cursor.close()
+    conexao.close()
     return{f"post criado, {usuario['nome']}, {usuario['email']}, {usuario['senha']}"}
 
 @Presto.get("/avaliacoes")
@@ -47,8 +57,7 @@ def avaliacoes():
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM avaliacao'
     cursor.execute(comando)
-    comando2 = f'INSERT INTO avaliacao (id_cliente, texto) VALUES ({avaliacoes['id_cliente']}, {avaliacoes['texto']})'
-    cursor.execute(comando2)
+    
 
     avaliacoes=cursor.fetchall()
     cursor.close()
@@ -59,6 +68,18 @@ def avaliacoes():
 @Presto.post("/avaliacoes")
 def avaliacoes(avaliacao: dict = Body (...)):
     avaliacoes.append(avaliacao)
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor()
+    comando = f'INSERT INTO avaliacao (id_cliente, texto) VALUES ({avaliacoes['id_cliente']}, {avaliacoes['texto']})'
+    cursor.execute(comando)
+    cursor.close()
+    conexao.close()
+
     return{f"post criado, {avaliacao['id_cliente']}, {avaliacao['texto']}"}
 
 
@@ -73,8 +94,6 @@ def pizza():
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM pizza'
     cursor.execute(comando)
-    comando2 = f'INSERT INTO pizza (nome, valor, link_imagem) VALUES ({pizza['nome']}, {pizza['valor']}, {pizza['link_img']})'
-    cursor.execute(comando2)
 
     pizza=cursor.fetchall()
     cursor.close()
@@ -85,6 +104,18 @@ def pizza():
 @Presto.post("/pizza")
 def pizza(pizza: dict = Body (...)):
     pizza.append(pizza)
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor()
+    comando = f'INSERT INTO pizza (nome, valor, link_imagem) VALUES ({pizza['nome']}, {pizza['valor']}, {pizza['link_img']})'
+    cursor.execute(comando)
+    cursor.close()
+    conexao.close()
+    
     return{f"post criado, {pizza['nome']}, {pizza['valor']}, {pizza['link_img']}"}
 
 
