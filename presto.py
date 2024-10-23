@@ -3,9 +3,9 @@ from fastapi import FastAPI
 from fastapi.params import Body
 
 Presto = FastAPI()
-posts = []
-postsA = []
-postsP = []
+usuarios = []
+avaliacoes = []
+pizza = []
 
 @Presto.get("/")
 def home():
@@ -22,6 +22,8 @@ def usuarios():
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM cliente'
     cursor.execute(comando)
+    comando2 = f'INSERT INTO cliente (nome, email, senha) VALUES ({usuarios['nome']}, {usuarios['email']}, {usuarios['senha']})'
+    cursor.execute(comando2)
 
     usuarios=cursor.fetchall()
     cursor.close()
@@ -29,18 +31,10 @@ def usuarios():
     
     return{"usuarios": usuarios}
 
-@Presto.get("/usuL")
-def root():
-    return{"mensagem": f"{posts}"}
-
-@Presto.get("/usuario{number}")
-def root(number:int):
-    return{"mensagem": f"{posts[number]}"}
-
-@Presto.post("/postC")
-def postC(turtle: dict = Body (...)):
-    posts.append(turtle)
-    return{f"post criado, {turtle['nome']}, {turtle['email']}, {turtle['senha']}"}
+@Presto.post("/usuarios")
+def usuarios(usuario: dict = Body (...)):
+    usuarios.append(usuario)
+    return{f"post criado, {usuario['nome']}, {usuario['email']}, {usuario['senha']}"}
 
 @Presto.get("/avaliacoes")
 def avaliacoes():
@@ -53,6 +47,8 @@ def avaliacoes():
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM avaliacao'
     cursor.execute(comando)
+    comando2 = f'INSERT INTO avaliacao (id_cliente, texto) VALUES ({avaliacoes['id_cliente']}, {avaliacoes['texto']})'
+    cursor.execute(comando2)
 
     avaliacoes=cursor.fetchall()
     cursor.close()
@@ -60,18 +56,10 @@ def avaliacoes():
 
     return {"avaliacoes":avaliacoes}
 
-@Presto.get("/avaL")
-def root():
-    return{"mensagem": f"{postsA}"}
-
-@Presto.get("/avaliacoes{number}")
-def root(number:int):
-    return{"mensagem": f"{postsA[number]}"}
-
-@Presto.post("/postA")
-def postA(fox: dict = Body (...)):
-    postsA.append(fox)
-    return{f"post criado, {fox['id_cliente']}, {fox['texto']}"}
+@Presto.post("/avaliacoes")
+def avaliacoes(avaliacao: dict = Body (...)):
+    avaliacoes.append(avaliacao)
+    return{f"post criado, {avaliacao['id_cliente']}, {avaliacao['texto']}"}
 
 
 @Presto.get("/pizzas")
@@ -85,6 +73,8 @@ def pizza():
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM pizza'
     cursor.execute(comando)
+    comando2 = f'INSERT INTO pizza (nome, valor, link_imagem) VALUES ({pizza['nome']}, {pizza['valor']}, {pizza['link_img']})'
+    cursor.execute(comando2)
 
     pizza=cursor.fetchall()
     cursor.close()
@@ -92,18 +82,10 @@ def pizza():
     
     return{"pizza":pizza}
 
-@Presto.get("/pizL")
-def root():
-    return{"mensagem": f"{postsP}"}
-
-@Presto.get("/pizza{number}")
-def root(number:int):
-    return{"mensagem": f"{postsP[number]}"}
-
-@Presto.post("/postP")
-def postP(dragon: dict = Body (...)):
-    postsP.append(dragon)
-    return{f"post criado, {dragon['nome']}, {dragon['valor']}, {dragon['link_img']}"}
+@Presto.post("/pizza")
+def pizza(pizza: dict = Body (...)):
+    pizza.append(pizza)
+    return{f"post criado, {pizza['nome']}, {pizza['valor']}, {pizza['link_img']}"}
 
 
 @Presto.get("/mentores")
