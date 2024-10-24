@@ -3,8 +3,8 @@ from fastapi import FastAPI
 from fastapi.params import Body
 
 Presto = FastAPI()
-usuarios = []
-avaliacoes = []
+usuario = []
+avaliacao = []
 pizza = []
 
 @Presto.get("/")
@@ -31,7 +31,7 @@ def usuarios():
 
 @Presto.post("/usuarios")
 def usuarios(usuario: dict = Body (...)):
-    usuarios.append(usuario)
+    usuario.append(usuario)
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -39,12 +39,15 @@ def usuarios(usuario: dict = Body (...)):
     database="presto_bd"
     )
     cursor = conexao.cursor()
-    comando = f'INSERT INTO cliente (nome, email, senha) VALUES ({usuarios['nome']}, {usuarios['email']}, {usuarios['senha']})'
-    cursor.execute(comando)
-
+    comando = f'INSERT INTO cliente (nome, email, senha) VALUES (%s, %s, %s)'
+    valores = (usuario['nome'], usuario['email'], usuario['senha'])
+    cursor.execute(comando, valores)
+    conexao.commit()
+    
+    usuario['id'] = cursor.lastrowid
     cursor.close()
     conexao.close()
-    return{f"post criado, {usuario['nome']}, {usuario['email']}, {usuario['senha']}"}
+    return usuario
 
 @Presto.get("/avaliacoes")
 def avaliacoes():
@@ -67,7 +70,7 @@ def avaliacoes():
 
 @Presto.post("/avaliacoes")
 def avaliacoes(avaliacao: dict = Body (...)):
-    avaliacoes.append(avaliacao)
+    avaliacao.append(avaliacao)
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -75,16 +78,19 @@ def avaliacoes(avaliacao: dict = Body (...)):
     database="presto_bd"
     )
     cursor = conexao.cursor()
-    comando = f'INSERT INTO avaliacao (id_cliente, texto) VALUES ({avaliacoes['id_cliente']}, {avaliacoes['texto']})'
-    cursor.execute(comando)
+    comando = f'INSERT INTO avaliacao (id_cliente, texto) VALUES (%s, %s)'
+    valores = (avaliacao["id_cliente"], avaliacao["texto"])
+    cursor.execute(comando, valores)
+    conexao.commit()
+
     cursor.close()
     conexao.close()
 
-    return{f"post criado, {avaliacao['id_cliente']}, {avaliacao['texto']}"}
+    return avaliacao
 
 
 @Presto.get("/pizzas")
-def pizza():
+def pizzass():
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -102,7 +108,7 @@ def pizza():
     return{"pizza":pizza}
 
 @Presto.post("/pizza")
-def pizza(pizza: dict = Body (...)):
+def pizzas(pizza: dict = Body (...)):
     pizza.append(pizza)
     conexao = mysql.connector.connect(
     host='localhost',
@@ -111,13 +117,15 @@ def pizza(pizza: dict = Body (...)):
     database="presto_bd"
     )
     cursor = conexao.cursor()
-    comando = f'INSERT INTO pizza (nome, valor, link_imagem) VALUES ({pizza['nome']}, {pizza['valor']}, {pizza['link_img']})'
-    cursor.execute(comando)
+    comando = f'INSERT INTO pizza (nome, valor, link_imagem) VALUES (%s, %s, %s)'
+    valores = (pizza["nome"], pizza["valor"], pizza["link_img"])
+    cursor.execute(comando, valores)
+    conexao.commit()
+
     cursor.close()
     conexao.close()
     
-    return{f"post criado, {pizza['nome']}, {pizza['valor']}, {pizza['link_img']}"}
-
+    return pizza
 
 @Presto.get("/mentores")
 def mentores():
