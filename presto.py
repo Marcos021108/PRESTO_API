@@ -83,6 +83,7 @@ def avaliacoes(avaliacao: dict = Body (...)):
     cursor.execute(comando, valores)
     conexao.commit()
 
+    avaliacao['id'] = cursor.lastrowid
     cursor.close()
     conexao.close()
 
@@ -122,6 +123,7 @@ def pizzas(pizza: dict = Body (...)):
     cursor.execute(comando, valores)
     conexao.commit()
 
+    pizza['id'] = cursor.lastrowid
     cursor.close()
     conexao.close()
     
