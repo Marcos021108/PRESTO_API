@@ -3,9 +3,6 @@ from fastapi import FastAPI
 from fastapi.params import Body
 
 Presto = FastAPI()
-usuario = []
-avaliacao = []
-pizza = []
 
 @Presto.get("/")
 def home():
@@ -31,7 +28,6 @@ def usuarios():
 
 @Presto.post("/usuarios")
 def usuarios(usuario: dict = Body (...)):
-    usuario.append(usuario)
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -70,7 +66,6 @@ def avaliacoes():
 
 @Presto.post("/avaliacoes")
 def avaliacoes(avaliacao: dict = Body (...)):
-    avaliacao.append(avaliacao)
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -110,7 +105,6 @@ def pizzass():
 
 @Presto.post("/pizza")
 def pizzas(pizza: dict = Body (...)):
-    pizza.append(pizza)
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
