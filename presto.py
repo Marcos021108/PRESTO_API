@@ -45,6 +45,40 @@ def usuarios(usuario: dict = Body (...)):
     conexao.close()
     return usuario
 
+@Presto.get("/usuarios/{id}")
+async def read_item(id: int):
+    id_passado = id
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor(dictionary=True)
+    comando = f'SELECT * FROM cliente WHERE id = (id_passado)'
+
+
+@Presto.put("/usuarios/{id}")
+def usuarios(usuario: dict = Body (...)):
+    id_passado = id
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor()
+    comando = f'UPDATE cliente SET texto = textoPassado WHERE Id = (idPassado)'
+    valores = (usuario['texto'])
+    cursor.execute(comando, valores)
+    conexao.commit()
+
+    usuario['id'] = cursor.lastrowid
+    cursor.close()
+    conexao.close()
+    return usuario
+
+
 @Presto.get("/avaliacoes")
 def avaliacoes():
     conexao = mysql.connector.connect(
@@ -63,6 +97,19 @@ def avaliacoes():
     conexao.close()
 
     return {"avaliacoes":avaliacoes}
+
+@Presto.get("/avaliacoes/{id}")
+async def read_itens(id: int):
+    id_passado = id
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor(dictionary=True)
+    comando = f'SELECT * FROM avaliacao WHERE id = (id_passado)'
+    return {"item_id": id}
 
 @Presto.post("/avaliacoes")
 def avaliacoes(avaliacao: dict = Body (...)):
@@ -86,7 +133,7 @@ def avaliacoes(avaliacao: dict = Body (...)):
 
 
 @Presto.get("/pizzas")
-def pizzass():
+def pizzas():
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -103,7 +150,20 @@ def pizzass():
     
     return{"pizza":pizza}
 
-@Presto.post("/pizza")
+@Presto.get("/pizzas/{id}")
+async def read_itens(id: int):
+    id_passado = id
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor(dictionary=True)
+    comando = f'SELECT * FROM pizza WHERE id = (id_passado)'
+    return {"item_id": id}
+
+@Presto.post("/pizzas")
 def pizzas(pizza: dict = Body (...)):
     conexao = mysql.connector.connect(
     host='localhost',
