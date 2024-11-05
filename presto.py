@@ -46,8 +46,8 @@ def usuarios(usuario: dict = Body (...)):
     return usuario
 
 @Presto.get("/usuarios/{id}")
-async def read_item(id: int):
-    id_passado = id
+def obter_usuario_id(id: int):
+
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -55,12 +55,20 @@ async def read_item(id: int):
     database="presto_bd"
     )
     cursor = conexao.cursor(dictionary=True)
-    comando = f'SELECT * FROM cliente WHERE id = (id_passado)'
+    comando = f'SELECT * FROM cliente WHERE id = %s'
+    valores = (id,)
+    cursor.execute(comando, valores)
+
+    usuario = cursor.fetchone()
+    cursor.close()
+    conexao.close()
+
+    return usuario
 
 
 @Presto.put("/usuarios/{id}")
-def usuarios(usuario: dict = Body (...)):
-    id_passado = id
+def atualizar_usuarios(id:int, usuario: dict = Body (...)):
+
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -68,12 +76,12 @@ def usuarios(usuario: dict = Body (...)):
     database="presto_bd"
     )
     cursor = conexao.cursor()
-    comando = f'UPDATE cliente SET texto = textoPassado WHERE Id = (idPassado)'
-    valores = (usuario['texto'])
+    comando = f'UPDATE cliente SET nome = %s, senha = %s WHERE Id = %s'
+    valores = (usuario['nome'], usuario['senha'], id)
     cursor.execute(comando, valores)
     conexao.commit()
 
-    usuario['id'] = cursor.lastrowid
+    usuario['id'] = id
     cursor.close()
     conexao.close()
     return usuario
@@ -99,8 +107,8 @@ def avaliacoes():
     return {"avaliacoes":avaliacoes}
 
 @Presto.get("/avaliacoes/{id}")
-async def read_itens(id: int):
-    id_passado = id
+def obter_avaliacao_id(id: int):
+
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -108,8 +116,35 @@ async def read_itens(id: int):
     database="presto_bd"
     )
     cursor = conexao.cursor(dictionary=True)
-    comando = f'SELECT * FROM avaliacao WHERE id = (id_passado)'
-    return {"item_id": id}
+    comando = f'SELECT * FROM avaliacao WHERE id = %s'
+    valores = (id,)
+    cursor.execute(comando, valores)
+
+    avaliacoes = cursor.fetchone()
+    cursor.close()
+    conexao.close()
+
+    return avaliacoes
+
+@Presto.put("/avaliacoes/{id}")
+def atualizar_avaliacao(id:int, avaliacao: dict = Body (...)):
+    
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor()
+    comando = f'UPDATE avaliacao SET texto = %s WHERE Id = %s'
+    valores = (avaliacao['texto'], id)
+    cursor.execute(comando, valores)
+    conexao.commit()
+
+    avaliacao['id'] = id
+    cursor.close()
+    conexao.close()
+    return avaliacao
 
 @Presto.post("/avaliacoes")
 def avaliacoes(avaliacao: dict = Body (...)):
@@ -151,8 +186,8 @@ def pizzas():
     return{"pizza":pizza}
 
 @Presto.get("/pizzas/{id}")
-async def read_itens(id: int):
-    id_passado = id
+def obter_pizzas_id(id: int):
+
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -160,11 +195,39 @@ async def read_itens(id: int):
     database="presto_bd"
     )
     cursor = conexao.cursor(dictionary=True)
-    comando = f'SELECT * FROM pizza WHERE id = (id_passado)'
-    return {"item_id": id}
+    comando = f'SELECT * FROM pizza WHERE id = %s'
+    valores = (id,)
+    cursor.execute(comando, valores)
+
+    pizza = cursor.fetchone()
+    cursor.close()
+    conexao.close()
+
+    return pizza
+
+@Presto.put("/pizzas/{id}")
+def atualizar_pizzas(id:int, pizza: dict = Body (...)):
+    
+    conexao = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password="",
+    database="presto_bd"
+    )
+    cursor = conexao.cursor()
+    comando = f'UPDATE pizza SET nome = %s, valor = %s, link_imagem WHERE Id = %s'
+    valores = (pizza['nome'], pizza['valor'], pizza['link_imagem'], id)
+    cursor.execute(comando, valores)
+    conexao.commit()
+
+    pizza['id'] = id
+    cursor.close()
+    conexao.close()
+    return pizza
 
 @Presto.post("/pizzas")
 def pizzas(pizza: dict = Body (...)):
+    
     conexao = mysql.connector.connect(
     host='localhost',
     user='root',
