@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from fastapi import FastAPI
 from fastapi.params import Body
 from hashlib import sha256
+from util import conectar_banco_de_dados
 
 
 UsuarioRouter = APIRouter()
@@ -10,12 +11,7 @@ UsuarioRouter = APIRouter()
 
 @UsuarioRouter.get("/usuarios")
 def obter_todos_usuarios():
-    conexao = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password="",
-    database="presto_bd"
-    )
+    conexao = conectar_banco_de_dados()
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM cliente'
     cursor.execute(comando)
@@ -28,12 +24,7 @@ def obter_todos_usuarios():
 
 @UsuarioRouter.post("/usuarios")
 def inserir_usuarios(usuario: dict = Body (...)):
-    conexao = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password="",
-    database="presto_bd"
-    )
+    conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
     comando = f'INSERT INTO cliente (nome, email, senha) VALUES (%s, %s, %s)'
     valores = (usuario['nome'], usuario['email'], senhaCod)
@@ -48,13 +39,7 @@ def inserir_usuarios(usuario: dict = Body (...)):
 
 @UsuarioRouter.get("/usuarios/{id}")
 def obter_usuario_id(id: int):
-
-    conexao = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password="",
-    database="presto_bd"
-    )
+    conexao = conectar_banco_de_dados()
     cursor = conexao.cursor(dictionary=True)
     comando = f'SELECT * FROM cliente WHERE id = %s'
     valores = (id,)
@@ -69,13 +54,7 @@ def obter_usuario_id(id: int):
 
 @UsuarioRouter.put("/usuarios/{id}")
 def atualizar_usuarios(id:int, usuario: dict = Body (...)):
-
-    conexao = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password="",
-    database="presto_bd"
-    )
+    conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
     comando = f'UPDATE cliente SET nome = %s, senha = %s WHERE Id = %s'
     valores = (usuario['nome'], senhaCod, id)
