@@ -28,7 +28,7 @@ def inserir_usuarios(usuario: dict = Body (...)):
     cursor = conexao.cursor()
     comando = f'INSERT INTO cliente (nome, email, senha) VALUES (%s, %s, %s)'
     valores = (usuario['nome'], usuario['email'], senhaCod)
-    senhaCod = sha256(usuario['senha'].encode()).digest
+    senhaCod = sha256(usuario['senha'].encode()).digest()
     cursor.execute(comando, valores)
     conexao.commit()
     
@@ -58,7 +58,7 @@ def atualizar_usuarios(id:int, usuario: dict = Body (...)):
     cursor = conexao.cursor()
     comando = f'UPDATE cliente SET nome = %s, senha = %s WHERE Id = %s'
     valores = (usuario['nome'], senhaCod, id)
-    senhaCod = sha256(usuario['senha'].encode()).digest
+    senhaCod = sha256(usuario['senha'].encode()).digest()
     cursor.execute(comando, valores)
     conexao.commit()
 
