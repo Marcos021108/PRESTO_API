@@ -66,3 +66,15 @@ def inserir_avaliacoes(avaliacao: dict = Body (...)):
     conexao.close()
 
     return avaliacao
+
+@AvaliacaoRouter.delete("/deleteUsuario/{id}")
+def deletar_avaliacao(id: int):
+    conexao = conectar_banco_de_dados()
+    cursor = conexao.cursor()
+    comando = f'DELETE FROM avaliacao WHERE id = %s'
+    valores = (id,)
+    cursor.execute(comando, valores)
+
+    cursor.close()
+    conexao.close()
+    return "avaliacao excluída"

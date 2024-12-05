@@ -27,8 +27,8 @@ def inserir_usuarios(usuario: dict = Body (...)):
     conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
     comando = f'INSERT INTO cliente (nome, email, senha) VALUES (%s, %s, %s)'
-    valores = (usuario['nome'], usuario['email'], senhaCod)
     senhaCod = sha256(usuario['senha'].encode()).digest()
+    valores = (usuario['nome'], usuario['email'], senhaCod)
     cursor.execute(comando, valores)
     conexao.commit()
     
@@ -57,8 +57,8 @@ def atualizar_usuarios(id:int, usuario: dict = Body (...)):
     conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
     comando = f'UPDATE cliente SET nome = %s, senha = %s WHERE Id = %s'
-    valores = (usuario['nome'], senhaCod, id)
     senhaCod = sha256(usuario['senha'].encode()).digest()
+    valores = (usuario['nome'], senhaCod, id)
     cursor.execute(comando, valores)
     conexao.commit()
 
@@ -66,3 +66,16 @@ def atualizar_usuarios(id:int, usuario: dict = Body (...)):
     cursor.close()
     conexao.close()
     return usuario
+
+@UsuarioRouter.delete("/deleteUsuario/{id}")
+def deletar_usuario(id: int):
+    conexao = conectar_banco_de_dados()
+    cursor = conexao.cursor()
+    comando = f'DELETE FROM cliente WHERE id = %s'
+    valores = (id,)
+    cursor.execute(comando, valores)
+    conexao.commit()
+
+    cursor.close()
+    conexao.close()
+    return "usuario excluído com sucesso"
