@@ -76,6 +76,7 @@ def deletar_usuario(id: int):
     cursor.execute(comando, valores)
     conexao.commit()
 
+    cursor.fetchall()
     cursor.close()
     conexao.close()
     return "usuario excluído com sucesso"

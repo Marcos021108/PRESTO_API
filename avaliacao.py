@@ -74,7 +74,9 @@ def deletar_avaliacao(id: int):
     comando = f'DELETE FROM avaliacao WHERE id = %s'
     valores = (id,)
     cursor.execute(comando, valores)
+    conexao.commit()
 
+    cursor.fetchall()
     cursor.close()
     conexao.close()
     return "avaliacao excluída"
