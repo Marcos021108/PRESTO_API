@@ -67,7 +67,8 @@ def atualizar_usuarios(id:int, usuario: dict = Body (...)):
     conexao.close()
     return usuario
 
-@UsuarioRouter.delete("/deleteUsuario/{id}")
+
+@UsuarioRouter.delete("/usuarios/{id}")
 def deletar_usuario(id: int):
     conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
@@ -76,7 +77,6 @@ def deletar_usuario(id: int):
     cursor.execute(comando, valores)
     conexao.commit()
 
-    cursor.fetchall()
     cursor.close()
     conexao.close()
     return "usuario excluído com sucesso"

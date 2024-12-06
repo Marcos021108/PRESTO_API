@@ -68,15 +68,15 @@ def inserir_pizzas(pizza: dict = Body (...)):
     
     return pizza
 
-@PizzaRouter.delete("/pizza/{id}")
+@PizzaRouter.delete("/pizzas/{id}")
 def deletar_pizza_do_cardapio(id: int):
     conexao = conectar_banco_de_dados()
     cursor = conexao.cursor()
-    comando = f'DELETE FROM curso WHERE id = %s'
+    comando = f'DELETE FROM pizza WHERE id = %s'
     valores = (id,)
     cursor.execute(comando, valores)
+    conexao.commit()
 
-    cursor.fetchall()
     cursor.close()
     conexao.close()
     return "Pizza excluída do cardápio"
